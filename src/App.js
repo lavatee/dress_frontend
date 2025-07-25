@@ -22,4 +22,40 @@ function App() {
   );
 }
 
+export async function RequestToApi(fetchFunc, saveFunc) { 
+  try { 
+      const response = await fetchFunc()
+
+      if (response.status === 401) { 
+          const refreshResponse = await fetch(`${backend}/auth/refresh`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({refresh_token: localStorage.getItem("refresh_token")})
+        })
+
+          if (refreshResponse.status === 401) { 
+              alert(`Вы не авторизованы, перейдите на главную страницу: ${mainPage}`); 
+          } else { 
+              const refreshData = await refreshResponse.json();
+              localStorage.setItem("access_token", refreshData.access)
+              localStorage.setItem("refresh_token", refreshData.refresh)
+              const response = await fetchFunc()
+              if (response.status === 401) { 
+                alert(`Вы не авторизованы, перейдите на главную страницу: ${mainPage}`); 
+              } else {
+                const data = await response.json();
+                saveFunc(data, response.status)
+              }
+          }
+      } else { 
+          const data = await response.json();
+          saveFunc(data, response.status)
+      } 
+  } catch (err) { 
+      console.error(err); 
+  } 
+}
+
 export default App;
