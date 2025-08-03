@@ -148,7 +148,7 @@ export default function Products() {
                 <div className="filter">
                     <p>Коллекции</p>
                     <div className="collections">
-                        {collections ? collections.map((collection) => (
+                        {collections ? collections?.map((collection) => (
                             <div key={collection.id} style={{display: "flex", flexDirection: "row", alignItems: "center"}}>
                                 <input type="radio" name="collection" value={collection.id} placeholder={collection.name} onChange={(e) => setSelectedCollectionId(collection.id)}/>
                                 <p>{collection.name}</p>
@@ -156,7 +156,7 @@ export default function Products() {
                         )) : <p>Коллекций нет</p>}
                     </div>
                 </div>
-                <button style={{position: "fixed", bottom: "10px", width: "28vw"}} onClick={() => {getProducts(getQuery()).then(setProducts)}}>Применить</button>
+                <button style={{position: "fixed", bottom: "10px", width: "28vw"}} onClick={() => {RequestWithRefresh(() => getProducts(getQuery())).then(data => setProducts(data.products))}}>Применить</button>
             </div>
             <div className="productsContainer" style={{
                     display: "flex", 
@@ -169,7 +169,7 @@ export default function Products() {
             }}>
                   <h1>{category}</h1>
                   <div className="products">
-                    {products ? products.map((product) => (
+                    {products?.length > 0 ? products.map((product) => (
                         <div key={product.id} onClick={() => navigate(`/product/${product.id}`)} style={{cursor: "pointer"}}>
                             <img src={product.main_photo_url} />
                             <p>{product.name}</p>

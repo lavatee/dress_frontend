@@ -8,6 +8,7 @@ export default function Cart() {
     const [total, setTotal] = useState(0);
     const [isAgreedToPersonalData, setIsAgreedToPersonalData] = useState(false);
     const [isAgreedToConfidential, setIsAgreedToConfidential] = useState(false);
+    const [deliveryType, setDeliveryType] = useState('delivery'); // 'delivery' или 'pickup'
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -118,6 +119,8 @@ export default function Cart() {
                                     <div>
                                         <h3>{product.name}</h3>
                                         <p>Размер: {product.size}</p>
+                                        <p>Количество: {product.amount}</p>
+                                        <p>В наличии: {product.exists ? 'Да' : 'Нет'}</p>
                                         <p>{product.price} ₽</p>
                                     </div>
                                     <button
@@ -173,6 +176,31 @@ export default function Cart() {
                         }}>
                             <p>ИТОГО</p>
                             <p>{total} ₽</p>
+                        </div>
+                        <div style={{marginTop: '20px'}}>
+                            <label>
+                                <input
+                                    type="radio"
+                                    value="delivery"
+                                    checked={deliveryType === 'delivery'}
+                                    onChange={() => setDeliveryType('delivery')}
+                                />
+                                Доставка
+                            </label>
+                            <label style={{marginLeft: '20px'}}>
+                                <input
+                                    type="radio"
+                                    value="pickup"
+                                    checked={deliveryType === 'pickup'}
+                                    onChange={() => setDeliveryType('pickup')}
+                                />
+                                Самовывоз
+                            </label>
+                            {deliveryType === 'pickup' && (
+                                <div style={{marginTop: '10px', fontWeight: 'bold'}}>
+                                    Адрес самовывоза: г. Новосибирск, Красный проспект, 101 ТРК «Ройял Парк», 2 этаж
+                                </div>
+                            )}
                         </div>
                         <div style={{
                             display: 'flex',

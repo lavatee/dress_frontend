@@ -44,9 +44,9 @@ function MainPage() {
         <h3 className="headerLink" onClick={() => navigate("/categories")}>СМОТРЕТЬ ВСЕ</h3>
       </div>
       <div style={{display: "flex", flexDirection: "row", alignItems: "center", justifyContent: "space-around", marginTop: "10px"}}>
-        <div className="mainPageCategory" onClick={() => navigate({ pathname: "/products", search: "?category=свитшоты" })}>
-          <img src="/img/свитшоты.jpg" alt="свитшоты" style={{width: "100%"}}/>
-          <h2 style={{width: "100%", textAlign: "center"}}>Свитшоты</h2>
+        <div className="mainPageCategory" onClick={() => navigate({ pathname: "/products", search: "?category=Платья" })}>
+          <img src="/img/платья.jpg" alt="Платья" style={{width: "100%"}}/>
+          <h2 style={{width: "100%", textAlign: "center"}}>Платья</h2>
         </div>
         <div className="mainPageCategory" onClick={() => navigate({ pathname: "/products", search: "?category=брюки" })}>
           <img src="/img/брюки.jpg" alt="брюки" style={{width: "100%"}}/>
