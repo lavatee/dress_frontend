@@ -1,38 +1,119 @@
-.App {
-  text-align: center;
+body {
+  font-family: 'Golos Text', sans-serif;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  background-color: #f0f0f0;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.headerLink {
+  cursor: pointer;
+  font-weight: 500;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.currentHeaderLink {
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.headerIcon {
+  cursor: pointer;
+  font-size: 28px;
+}
+
+button {
+  background-color: #000;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  transition: 0.3s;
+  font-size: 20px
+}
+
+button:hover {
+  background-color: #202020;
+}
+
+.mainPageCategory {
+  width: 25vw;
+  align-items: center;
+  height: 50vh;
+  background-size: cover;
+  background-position: center;
+  transition: 0.3s;
+}
+
+.mainPageCategory:hover {
+  cursor: pointer;
+  transform: scale(1.04);
+  
+}
+
+.products {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  padding: 20px;
+}
+
+.products > div {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  text-align: center;
+  padding: 15px;
+  border: 1px solid #eee;
+  border-radius: 8px;
 }
 
-.App-link {
-  color: #61dafb;
+.products img {
+  max-width: 100%;
+  height: auto;
+  margin-bottom: 10px;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.size {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+}
+
+.size > p {
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  padding: 10px 20px;
+  border: 2px solid #555555;
+  transition: 0.3s;
+}
+
+.size > p:hover {
+  background-color: #c7c7c7;
+}
+
+.selectedSize {
+  background-color: #555555;
+  color: #fff;
+}
+
+.filters {
+  width: 30%;
+  background-color: #fafafa;
+  padding: 30px;
+  padding-bottom: 60px; /* Для кнопки "Применить" */
+}
+
+.filter {
+  margin-bottom: 30px;
+}
+
+input {
+  padding: 15px;
+  border: 2px solid #555555;
 }

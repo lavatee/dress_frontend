@@ -1,64 +1,84 @@
 import logo from './logo.svg';
 import './App.css';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import Products from './Products';
+import Header from './Header';
+import { useNavigate } from 'react-router-dom';
+import Auth from './Auth';
+import Product from './Product';
+import Cart from './Cart';
+import Liked from './Liked';
+import Search from './Search';
 
-function App() {
+
+export default function App() {
   return (
-    <BrouserRouter>
+    <BrowserRouter>
       <Routes>
         <Route path="/" element={<MainPage />} />
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/register" element={<RegisterPage />} />
-        <Route path="/profile" element={<ProfilePage />} />
-        <Route path="/categories" element={<CategoriesPage />} />
-        <Route path="/products" element={<ProductsPage />} />
-        <Route path="/search_products" element={<SearchProductsPage />} />
-        <Route path="/product/:id" element={<ProductPage />} />
-        <Route path="/cart" element={<CartPage />} />
-        <Route path="/orders" element={<OrdersPage />} />
-        <Route path="/order/:id" element={<OrderPage />} />
-        <Route path="/for_buyers" element={<ForBuyersPage />} />
-        <Route path="/about" element={<AboutPage />} />
-        <Route path="/delivery" element={<DeliveryPage />} />
-        <Route path="*" element={<NotFoundPage />} />
+        <Route path="/products" element={<Products />} />
+        <Route path="/login" element={<Auth isLogin={true} />} />
+        <Route path="/register" element={<Auth isLogin={false} />} />
+        <Route path="/product/:id" element={<Product />} />
+        <Route path="/cart" element={<Cart />} />
+        <Route path="/favorites" element={<Liked />} />
+        <Route path="/search_products" element={<Search />} />
+        <Route path="/categories" element={<MainPage />} />
+        <Route path="/delivery" element={<MainPage />} />
+        <Route path="/for_buyers" element={<MainPage />} />
+        <Route path="/about" element={<MainPage />} />
       </Routes>
-    </BrouserRouter>
+    </BrowserRouter>
   );
 }
 
-export async function RequestToApi(fetchFunc, saveFunc) { 
-  try { 
-      const response = await fetchFunc()
 
-      if (response.status === 401) { 
-          const refreshResponse = await fetch(`${backend}/auth/refresh`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({refresh_token: localStorage.getItem("refresh_token")})
-        })
 
-          if (refreshResponse.status === 401) { 
-              alert(`Вы не авторизованы, перейдите на главную страницу: ${mainPage}`); 
-          } else { 
-              const refreshData = await refreshResponse.json();
-              localStorage.setItem("access_token", refreshData.access)
-              localStorage.setItem("refresh_token", refreshData.refresh)
-              const response = await fetchFunc()
-              if (response.status === 401) { 
-                alert(`Вы не авторизованы, перейдите на главную страницу: ${mainPage}`); 
-              } else {
-                const data = await response.json();
-                saveFunc(data, response.status)
-              }
-          }
-      } else { 
-          const data = await response.json();
-          saveFunc(data, response.status)
-      } 
-  } catch (err) { 
-      console.error(err); 
-  } 
+function MainPage() {
+  const navigate = useNavigate();
+  return (
+    <div>
+      <Header сurrentPage="Главная"/>
+      <div style={{display: "flex", flexDirection: "row", alignItems: "center", justifyContent: "space-between", padding: "10px"}}>
+        <h1>Каталог</h1>
+        <h3 className="headerLink" onClick={() => navigate("/categories")}>СМОТРЕТЬ ВСЕ</h3>
+      </div>
+      <div style={{display: "flex", flexDirection: "row", alignItems: "center", justifyContent: "space-around", marginTop: "10px"}}>
+        <div className="mainPageCategory" onClick={() => navigate({ pathname: "/products", search: "?category=свитшоты" })}>
+          <img src="/img/свитшоты.jpg" alt="свитшоты" style={{width: "100%"}}/>
+          <h2 style={{width: "100%", textAlign: "center"}}>Свитшоты</h2>
+        </div>
+        <div className="mainPageCategory" onClick={() => navigate({ pathname: "/products", search: "?category=брюки" })}>
+          <img src="/img/брюки.jpg" alt="брюки" style={{width: "100%"}}/>
+          <h2 style={{width: "100%", textAlign: "center"}}>Брюки</h2>
+        </div>
+        <div className="mainPageCategory" onClick={() => navigate({ pathname: "/products", search: "?category=джинсы" })}>
+          <img src="/img/джинсы.jpg" alt="джинсы" style={{width: "100%"}}/>
+          <h2 style={{width: "100%", textAlign: "center"}}>Джинсы</h2>
+        </div>
+      </div>
+
+    </div>
+  )
 }
 
-export default App;
+export async function RequestWithRefresh(requestFunction) {
+  try {
+    const response = await requestFunction();
+    if (response?.status == 401) {
+      const refreshResponse = await fetch(`http://localhost:8000/auth/refresh`, {
+          method: 'POST',
+          body: JSON.stringify({refresh_token: localStorage.getItem('refresh_token')})
+      });
+      const refreshData = await refreshResponse.json();
+      if (refreshResponse.status === 200) {
+          localStorage.setItem('access_token', refreshData.access_token);
+          localStorage.setItem('refresh_token', refreshData.refresh_token);
+          return await requestFunction();
+        }
+    }
+    return response;
+  } catch (err) {
+    console.log(err);
+  }
+}
